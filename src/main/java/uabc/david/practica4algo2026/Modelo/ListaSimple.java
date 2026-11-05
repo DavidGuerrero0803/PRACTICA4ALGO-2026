@@ -113,4 +113,8 @@ public class ListaSimple<T> {
 
         return r.getInfo();
     }
+
+    public Nodo<T> getInicio() {
+        return inicio;
+    }
 }

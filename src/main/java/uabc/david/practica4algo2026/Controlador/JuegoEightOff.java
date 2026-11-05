@@ -8,7 +8,6 @@ public class JuegoEightOff {
     private CeldaLibre[] celdas = new CeldaLibre[8];
     private ListaSimple<Movimiento> historial;
     private Mazo mazo;
-
     private boolean reyesEnCeldaVacia;
     private boolean terminado;
     private boolean victoria;
@@ -193,6 +192,7 @@ public class JuegoEightOff {
         CartaInglesa[] grupo = quitarCartas(origen, cantidad);
         colocarCartas(grupo, destino);
         historial.insertarInicio(new Movimiento(base, origen, destino, cantidad));
+        actualizarEstado();
         return true;
     }
 
@@ -210,4 +210,152 @@ public class JuegoEightOff {
         return true;
     }
 
+    /**
+     * Entrega una pista (sin límite mientras la partida siga). No mueve nada; solo
+     * dice qué cartas mover y hacia dónde para que la vista las resalte.
+     * @return el movimiento sugerido, o null si la partida terminó o no hay jugadas
+     */
+    public Movimiento darPista() {
+        if (terminado) {
+            return null;
+        }
+        Movimiento sugerido = mejorMovimiento(true);
+        if (sugerido == null) {
+            sugerido = mejorMovimiento(false);
+        }
+        return sugerido;
+    }
+
+    public boolean hayMovimientosPosibles() {
+        return mejorMovimiento(false) != null;
+    }
+
+    private Movimiento mejorMovimiento(boolean evitarInverso) {
+        Movimiento m = buscarHacia("FUNDACION", 4, 0, evitarInverso);
+        if (m == null) {
+            m = buscarHacia("CASCADA", 8, 1, evitarInverso);
+        }
+        if (m == null) {
+            m = buscarHacia("CASCADA", 8, 2, evitarInverso);
+        }
+        if (m == null) {
+            m = buscarHacia("CELDA", 8, 0, evitarInverso);
+        }
+        return m;
+    }
+
+    private Movimiento buscarHacia(String tipoDestino, int cantidadDestinos, int filtroDestino, boolean evitarInverso) {
+        for (int o = 0; o < 16; o++) {
+            ZonaTablero origen = (o < 8) ? new ZonaTablero("CASCADA", o) : new ZonaTablero("CELDA", o - 8);
+            int maximo;
+            if (origen.esCascada()) {
+                maximo = cartasMovibles(o);
+            } else {
+                maximo = celdas[o - 8].estaVacia() ? 0 : 1;
+            }
+
+            for (int cuantas = 1; cuantas <= maximo; cuantas++) {
+                for (int d = 0; d < cantidadDestinos; d++) {
+                    ZonaTablero destino = new ZonaTablero(tipoDestino, d);
+                    boolean destinoVacio = obtenerCarta(destino) == null;
+                    if (filtroDestino == 1 && destinoVacio) {
+                        continue;
+                    }
+                    if (filtroDestino == 2 && !destinoVacio) {
+                        continue;
+                    }
+                    if (!esMovimientoValido(origen, destino, cuantas)
+                            || !descartarMovimiento(origen, destino, cuantas)) {
+                        continue;
+                    }
+                    if (evitarInverso && esInversoDelUltimo(origen, destino, cuantas)) {
+                        continue;
+                    }
+                    return new Movimiento(obtenerCartaBase(origen, cuantas), origen, destino, cuantas);
+                }
+            }
+        }
+        return null;
+    }
+
+    private boolean descartarMovimiento(ZonaTablero origen, ZonaTablero destino, int cuantas) {
+        if (origen.esCelda() && destino.esCelda()) {
+            return false;
+        }
+        if (origen.esCascada() && destino.esCascada()
+                && cartasEnCascada(origen.getIndice()) == cuantas
+                && obtenerCarta(destino) == null) {
+            return false;
+        }
+        return true;
+    }
+
+    public int cartasEnCascada(int indice) {
+        return cascadas[indice].contarCartas();
+    }
+
+    private boolean esInversoDelUltimo(ZonaTablero origen, ZonaTablero destino, int cuantas) {
+        Movimiento ultimo = getUltimoMovimiento();
+        return ultimo != null
+                && cuantas == ultimo.getCantidad()
+                && origen.equals(ultimo.getDestino())
+                && destino.equals(ultimo.getOrigen());
+    }
+
+    /**
+     * El jugador ganó si las 4 fundaciones dicen que están completas.
+     */
+    public boolean verificarVictoria() {
+        for (int i = 0; i < 4; i++) {
+            if (!fundaciones[i].estaCompleta()) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /**
+     * Se llama después de cada movimiento,
+     * verificando si el jugador ya ganó o ha perdido.
+     */
+    private void actualizarEstado() {
+        if (verificarVictoria()) {
+            victoria = true;
+            terminado = true;
+        } else if (!hayMovimientosPosibles()) {
+            terminado = true;
+        }
+    }
+
+    public boolean puedeDeshacer() {
+        return !terminado && !historial.estaVacia();
+    }
+
+    public boolean puedePedirPista() {
+        return !terminado;
+    }
+
+    public boolean isTerminado() {
+        return terminado;
+    }
+
+    public boolean isVictoria() {
+        return victoria;
+    }
+
+    public Movimiento getUltimoMovimiento() {
+        return historial.estaVacia() ? null : historial.getInicio().getInfo();
+    }
+
+    public Cascada[] getCascadas() {
+        return cascadas;
+    }
+
+    public Fundacion[] getFundaciones() {
+        return fundaciones;
+    }
+
+    public CeldaLibre[] getCeldasLibres() {
+        return celdas;
+    }
 }
