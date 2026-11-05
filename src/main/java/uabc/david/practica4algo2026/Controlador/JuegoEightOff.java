@@ -128,4 +128,86 @@ public class JuegoEightOff {
             cascadas[zona.getIndice()].devolverBloque(grupo);
         }
     }
+
+    public int celdasVacias() {
+        int vacias = 0;
+        for (int i = 0; i < 8; i++) {
+            if (celdas[i].estaVacia()) {
+                vacias++;
+            }
+        }
+        return vacias;
+    }
+
+    /**
+     * Cuenta cuantas cartas se pueden tomar de una cascada
+     * (contando desde la carta visible).
+     */
+    public int cartasMovibles(int indiceCascada) {
+        int enSecuencia = cascadas[indiceCascada].contarCartasEnSecuencia();
+        return Math.min(enSecuencia, celdasVacias() + 1);
+    }
+
+    /**
+     * Verifica que se pueda tomar un grupo de cartas.
+     */
+    public boolean puedeSeleccionar(ZonaTablero zona, int cantidad) {
+        if (terminado || cantidad < 1) {
+            return false;
+        }
+        if (zona.esCascada()) {
+            return cantidad <= celdasVacias() + 1 && cascadas[zona.getIndice()].sePuedeRemover(cantidad);
+        }
+        if (zona.esCelda()) {
+            return cantidad == 1 && !celdas[zona.getIndice()].estaVacia();
+        }
+        // De una fundación solo se toma la carta de arriba.
+        return cantidad == 1 && fundaciones[zona.getIndice()].puedeRemoverCarta();
+    }
+
+    /**
+     * Verifica un movimiento sin ejecutarlo.
+     */
+    public boolean esMovimientoValido(ZonaTablero origen, ZonaTablero destino, int cantidad) {
+        if (origen.equals(destino) || !puedeSeleccionar(origen, cantidad)) {
+            return false;
+        }
+        if (cantidad > 1 && !destino.esCascada()) {
+            return false;
+        }
+        if (origen.esFundacion() && destino.esFundacion()) {
+            return false;
+        }
+        return sePuedeColocar(obtenerCartaBase(origen, cantidad), destino);
+    }
+
+    /**
+     * Ejecuta el movimiento si es válido y lo anota en el historial.
+     * @return true si se movieron las cartas, false si el movimiento no era válido.
+     */
+    public boolean moverCartas(ZonaTablero origen, ZonaTablero destino, int cantidad) {
+        if (!esMovimientoValido(origen, destino, cantidad)) {
+            return false;
+        }
+        CartaInglesa base = obtenerCartaBase(origen, cantidad);
+        CartaInglesa[] grupo = quitarCartas(origen, cantidad);
+        colocarCartas(grupo, destino);
+        historial.insertarInicio(new Movimiento(base, origen, destino, cantidad));
+        return true;
+    }
+
+    /**
+     * Revierte el último movimiento.
+     * @return false si no hay nada que deshacer (o la partida ya terminó).
+     */
+    public boolean deshacerMovimiento() {
+        if (terminado || historial.estaVacia()) {
+            return false;
+        }
+        Movimiento m = historial.eliminarInicio();
+        CartaInglesa[] grupo = quitarCartas(m.getDestino(), m.getCantidad());
+        devolverCartas(grupo, m.getOrigen());
+        return true;
+    }
+
 }
