@@ -5,4 +5,5 @@ module uabc.david.practica4algo2026 {
 
     opens uabc.david.practica4algo2026 to javafx.fxml;
     exports uabc.david.practica4algo2026;
+    exports uabc.david.practica4algo2026.Vista;
 }
