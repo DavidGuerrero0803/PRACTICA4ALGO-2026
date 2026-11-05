@@ -81,4 +81,50 @@ public class ListaDobleCircular<T> {
 
         return dato;
     }
+
+    public boolean estaVacia() {
+        return inicio == null;
+    }
+
+    public void ordenarLista() {
+        if (inicio == null || inicio == fin) {
+            return;
+        }
+
+        NodoDoble<T> i = inicio;
+        do {
+            NodoDoble<T> menor = i;
+            NodoDoble<T> j = i.getSig();
+
+            while (j != inicio) {
+                Comparable<T> comp = (Comparable<T>) j.getInfo();
+                if (comp.compareTo(menor.getInfo()) < 0) {
+                    menor = j;
+                }
+                j = j.getSig();
+            }
+
+            if (menor != i) {
+                T temp = i.getInfo();
+                i.setInfo(menor.getInfo());
+                menor.setInfo(temp);
+            }
+
+            i = i.getSig();
+        } while (i != fin);
+    }
+
+    public String mostrarLista() {
+        String cadena = "";
+        if (inicio != null) {
+            NodoDoble<T> r = inicio;
+            do {
+                cadena += r.getInfo() + " ";
+                r = r.getSig();
+            } while (r != inicio);
+        } else {
+            System.out.println("Lista vacia");
+        }
+        return cadena;
+    }
 }

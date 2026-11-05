@@ -1,16 +1,14 @@
 package uabc.david.practica4algo2026.Modelo;
 
 /**
- * Write a description of class Mazo here.
+ * Mazo de 52 cartas guardado en una lista doble circular.
  *
  * @author (Cecilia Curlango Rosas)
  * @version (2025-2)
  */
-import java.util.ArrayList;
-import java.util.Collections;
 
 public class Mazo {
-    private ArrayList<CartaInglesa> cartas = new ArrayList<>();
+    private ListaDobleCircular<CartaInglesa> cartas = new ListaDobleCircular<>();
 
     public Mazo() {
         llenar(); // crea todas las cartas, excluyendo Jokers
@@ -19,37 +17,42 @@ public class Mazo {
 
     /**
      * Obtiene todas las cartas del mazo.
-     * @return
+     * @return la lista doble circular con las cartas que quedan.
      */
-    public ArrayList<CartaInglesa> getCartas() {
+    public ListaDobleCircular<CartaInglesa> getCartas() {
         return cartas;
     }
 
+    /**
+     * Saca la carta de arriba del mazo (el nodo inicio de la lista).
+     * @return la carta, o null si el mazo ya no tiene cartas.
+     */
     public CartaInglesa obtenerUnaCarta() {
-        if (cartas.size() > 0) {
-            return cartas.remove(0);
+        if (cartas.estaVacia()) {
+            return null;
         }
-        return null;
+        return cartas.eliminarInicio();
     }
+
     private void mezclar() {
-        Collections.shuffle(cartas);
+
     }
 
     private void llenar() {
-        for (int i = 2; i <=14 ; i++) {
+        for (int i = 2; i <= 14; i++) {
             for (Palo palo : Palo.values()) {
-                CartaInglesa c = new CartaInglesa(i,palo, palo.getColor());
-                cartas.add(c);
+                CartaInglesa c = new CartaInglesa(i, palo, palo.getColor());
+                cartas.insertarFin(c);
             }
         }
     }
 
     public void ordenar() {
-        Collections.sort(cartas);
+        cartas.ordenarLista();
     }
 
     @Override
     public String toString() {
-        return cartas.toString();
+        return cartas.mostrarLista();
     }
 }
