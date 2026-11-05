@@ -83,21 +83,21 @@ public class VistaCascada {
      * Se encarga de resaltar en un solo contorno
      * que rodea las últimas cartas de la cascada.
      */
-    public void resaltarGrupo(int cantidad, String claseCss) {
+    public void resaltarGrupo(int cantidad, String estiloCss) {
         double y = (cartasDibujadas - cantidad) * desplazamiento;
         double alto = (cantidad - 1) * desplazamiento + cartas.getAltoCarta();
-        nodo.getChildren().add(cartas.crearContorno(y, alto, claseCss));
+        nodo.getChildren().add(cartas.crearContorno(y, alto, estiloCss));
     }
 
     /**
      * Resalta el contorno de la carta visible en donde caería un movimiento.
      */
-    public void resaltarDestino(String claseCss) {
+    public void resaltarDestino(String estiloCss) {
         double y = 0;
         if (cartasDibujadas > 0) {
             y = (cartasDibujadas - 1) * desplazamiento;
         }
-        nodo.getChildren().add(cartas.crearContorno(y, cartas.getAltoCarta(), claseCss));
+        nodo.getChildren().add(cartas.crearContorno(y, cartas.getAltoCarta(), estiloCss));
     }
 
     public Pane getNodo() {
