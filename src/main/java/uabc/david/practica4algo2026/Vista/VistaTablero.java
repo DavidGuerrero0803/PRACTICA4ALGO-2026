@@ -69,26 +69,26 @@ public class VistaTablero {
     /**
      * Contorno que rodea "cantidad" cartas desde la ubicación indicada (selección o pista).
      */
-    public void resaltarGrupo(ZonaTablero origen, int cantidad, String claseCss) {
+    public void resaltarGrupo(ZonaTablero origen, int cantidad, String estiloCss) {
         if (origen.esCascada()) {
-            cascadas[origen.getIndice()].resaltarGrupo(cantidad, claseCss);
+            cascadas[origen.getIndice()].resaltarGrupo(cantidad, estiloCss);
         } else if (origen.esCelda()) {
-            celdas[origen.getIndice()].resaltar(claseCss);
+            celdas[origen.getIndice()].resaltar(estiloCss);
         } else {
-            fundaciones[origen.getIndice()].resaltar(claseCss);
+            fundaciones[origen.getIndice()].resaltar(estiloCss);
         }
     }
 
     /**
      * Contorno de la carta (o celda vacía) donde caería el movimiento de una pista.
      */
-    public void resaltarDestino(ZonaTablero destino, String claseCss) {
+    public void resaltarDestino(ZonaTablero destino, String estiloCss) {
         if (destino.esCascada()) {
-            cascadas[destino.getIndice()].resaltarDestino(claseCss);
+            cascadas[destino.getIndice()].resaltarDestino(estiloCss);
         } else if (destino.esCelda()) {
-            celdas[destino.getIndice()].resaltar(claseCss);
+            celdas[destino.getIndice()].resaltar(estiloCss);
         } else {
-            fundaciones[destino.getIndice()].resaltar(claseCss);
+            fundaciones[destino.getIndice()].resaltar(estiloCss);
         }
     }
 

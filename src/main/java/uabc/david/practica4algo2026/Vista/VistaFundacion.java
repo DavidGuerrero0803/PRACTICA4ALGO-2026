@@ -10,7 +10,7 @@ import javafx.scene.text.Text;
 
 /**
  * Esta clase dibuja una fundación, es decir,
- * una celda vacía o únicamente su carta más alta.
+ * una fundación vacía o únicamente su carta más alta.
  */
 public class VistaFundacion {
     private VistaCarta cartas;

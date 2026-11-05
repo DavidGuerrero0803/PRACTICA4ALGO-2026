@@ -7,8 +7,8 @@ import uabc.david.practica4algo2026.Modelo.ZonaTablero;
 import javafx.scene.layout.Pane;
 
 /**
- * Esta clase dibuja una celda libre, es decir, una celda vacía
- * o la única carta que contiene al iniciar.
+ * Esta clase dibuja una celda libre en donde se ponen
+ * las cartas a manera de reserva.
  */
 public class VistaCeldaLibre {
     private VistaCarta cartas;

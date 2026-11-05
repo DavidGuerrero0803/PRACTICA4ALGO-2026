@@ -79,7 +79,7 @@ public class JuegoEightOff {
     /**
      * Verifica que la carta seleccionada cabe en la zona destino.
      */
-    private boolean sePuedeColocar(CartaInglesa carta, ZonaTablero destino) {
+    private boolean puedeColocarCarta(CartaInglesa carta, ZonaTablero destino) {
         if (destino.esCelda()) {
             return celdas[destino.getIndice()].puedeRecibirCarta(carta);
         }
@@ -177,7 +177,7 @@ public class JuegoEightOff {
         if (origen.esFundacion() && destino.esFundacion()) {
             return false;
         }
-        return sePuedeColocar(obtenerCartaBase(origen, cantidad), destino);
+        return puedeColocarCarta(obtenerCartaBase(origen, cantidad), destino);
     }
 
     /**
@@ -204,9 +204,9 @@ public class JuegoEightOff {
         if (terminado || historial.estaVacia()) {
             return false;
         }
-        Movimiento m = historial.eliminarInicio();
-        CartaInglesa[] grupo = quitarCartas(m.getDestino(), m.getCantidad());
-        devolverCartas(grupo, m.getOrigen());
+        Movimiento movimiento = historial.eliminarInicio();
+        CartaInglesa[] grupo = quitarCartas(movimiento.getDestino(), movimiento.getCantidad());
+        devolverCartas(grupo, movimiento.getOrigen());
         return true;
     }
 

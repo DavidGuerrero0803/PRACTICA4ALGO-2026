@@ -71,7 +71,7 @@ public class EightOffGUI extends Application {
         if (estilo != null) {
             escena.getStylesheets().add(estilo.toExternalForm());
         } else {
-            System.err.println("No se encontró estilo.css en los recursos.");
+            System.err.println("No se encontró estilos.css en los recursos.");
         }
 
         escenario.setTitle("Eight Off");
