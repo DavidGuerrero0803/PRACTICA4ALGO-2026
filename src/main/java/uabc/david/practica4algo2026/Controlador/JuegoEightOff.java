@@ -211,9 +211,8 @@ public class JuegoEightOff {
     }
 
     /**
-     * Entrega una pista (sin límite mientras la partida siga). No mueve nada; solo
-     * dice qué cartas mover y hacia dónde para que la vista las resalte.
-     * @return el movimiento sugerido, o null si la partida terminó o no hay jugadas
+     * Entrega una pista, indicando qué cartas mover y hacia dónde.
+     * @return el movimiento sugerido, o null si la partida terminó o no hay jugadas.
      */
     public Movimiento darPista() {
         if (terminado) {
@@ -231,32 +230,32 @@ public class JuegoEightOff {
     }
 
     private Movimiento mejorMovimiento(boolean evitarInverso) {
-        Movimiento m = buscarHacia("FUNDACION", 4, 0, evitarInverso);
-        if (m == null) {
-            m = buscarHacia("CASCADA", 8, 1, evitarInverso);
+        Movimiento movimiento = buscarHacia("FUNDACION", 4, 0, evitarInverso);
+        if (movimiento == null) {
+            movimiento = buscarHacia("CASCADA", 8, 1, evitarInverso);
         }
-        if (m == null) {
-            m = buscarHacia("CASCADA", 8, 2, evitarInverso);
+        if (movimiento == null) {
+            movimiento = buscarHacia("CASCADA", 8, 2, evitarInverso);
         }
-        if (m == null) {
-            m = buscarHacia("CELDA", 8, 0, evitarInverso);
+        if (movimiento == null) {
+            movimiento = buscarHacia("CELDA", 8, 0, evitarInverso);
         }
-        return m;
+        return movimiento;
     }
 
     private Movimiento buscarHacia(String tipoDestino, int cantidadDestinos, int filtroDestino, boolean evitarInverso) {
-        for (int o = 0; o < 16; o++) {
-            ZonaTablero origen = (o < 8) ? new ZonaTablero("CASCADA", o) : new ZonaTablero("CELDA", o - 8);
+        for (int i = 0; i < 16; i++) {
+            ZonaTablero origen = (i < 8) ? new ZonaTablero("CASCADA", i) : new ZonaTablero("CELDA", i - 8);
             int maximo;
             if (origen.esCascada()) {
-                maximo = cartasMovibles(o);
+                maximo = cartasMovibles(i);
             } else {
-                maximo = celdas[o - 8].estaVacia() ? 0 : 1;
+                maximo = celdas[i - 8].estaVacia() ? 0 : 1;
             }
 
             for (int cuantas = 1; cuantas <= maximo; cuantas++) {
-                for (int d = 0; d < cantidadDestinos; d++) {
-                    ZonaTablero destino = new ZonaTablero(tipoDestino, d);
+                for (int j = 0; j < cantidadDestinos; j++) {
+                    ZonaTablero destino = new ZonaTablero(tipoDestino, j);
                     boolean destinoVacio = obtenerCarta(destino) == null;
                     if (filtroDestino == 1 && destinoVacio) {
                         continue;
