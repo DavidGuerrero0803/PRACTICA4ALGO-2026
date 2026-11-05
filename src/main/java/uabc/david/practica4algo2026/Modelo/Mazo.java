@@ -35,7 +35,7 @@ public class Mazo {
     }
 
     private void mezclar() {
-
+        cartas.mezclarLista();
     }
 
     private void llenar() {

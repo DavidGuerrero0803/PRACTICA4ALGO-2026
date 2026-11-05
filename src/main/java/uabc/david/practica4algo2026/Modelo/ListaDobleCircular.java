@@ -1,5 +1,7 @@
 package uabc.david.practica4algo2026.Modelo;
 
+import java.util.Random;
+
 /**
  * Representa una variante de una lista en donde el último nodo
  * se conecta directamente con el primero, y el primero con el último.
@@ -126,5 +128,50 @@ public class ListaDobleCircular<T> {
             System.out.println("Lista vacia");
         }
         return cadena;
+    }
+
+    public void mezclarLista() {
+        int totalNodos = contarNodos();
+        Random rmd = new Random();
+        
+        for (int i = totalNodos - 1; i > 0; i--) {
+            int j = rmd.nextInt(i + 1);
+            NodoDoble<T> a = buscarNodo(i, totalNodos);
+            NodoDoble<T> b = buscarNodo(j, totalNodos);
+            T temp = a.getInfo();
+            a.setInfo(b.getInfo());
+            b.setInfo(temp);
+        }
+    }
+
+    public int contarNodos() {
+        if (inicio == null) {
+            return 0;
+        }
+        int contador = 0;
+        NodoDoble<T> r = inicio;
+        do {
+            contador++;
+            r = r.getSig();
+        } while (r != inicio);
+
+        return contador;
+    }
+
+    private NodoDoble<T> buscarNodo(int posicion, int totalNodos) {
+        NodoDoble<T> r;
+        if (posicion <= totalNodos / 2) {
+            r = inicio;
+            for (int i = 0; i < posicion; i++) {
+                r = r.getSig();
+            }
+        } else {
+            r = fin;
+            for (int i = totalNodos - 1; i > posicion; i--) {
+                r = r.getAnt();
+            }
+        }
+        
+        return r;
     }
 }
