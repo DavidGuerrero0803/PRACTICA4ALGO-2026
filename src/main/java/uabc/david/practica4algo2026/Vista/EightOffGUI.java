@@ -11,6 +11,8 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
+import java.net.URL;
+
 public class EightOffGUI extends Application {
     private JuegoEightOff controlador;
 
@@ -24,8 +26,11 @@ public class EightOffGUI extends Application {
         controlador = new JuegoEightOff();
 
         botonNuevo = new Button("Nuevo juego");
+        botonNuevo.getStyleClass().add("boton-menu");
         botonDeshacer = new Button("Deshacer");
+        botonDeshacer.getStyleClass().add("boton-menu");
         botonPista = new Button("Pista");
+        botonPista.getStyleClass().add("boton-menu");
 
         mensaje = new Label();
         mensaje.setWrapText(true);
@@ -47,8 +52,15 @@ public class EightOffGUI extends Application {
 
         BorderPane raiz = new BorderPane();
         raiz.setRight(panelDerecho);
+        raiz.getStyleClass().add("fondo");
 
         Scene escena = new Scene(raiz, 1040, 620);
+        URL estilo = getClass().getResource("/estilos.css");
+        if (estilo != null) {
+            escena.getStylesheets().add(estilo.toExternalForm());
+        } else {
+            System.err.println("No se encontró estilo.css en los recursos.");
+        }
 
         escenario.setTitle("Eight Off");
         escenario.setScene(escena);

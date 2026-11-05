@@ -1,0 +1,31 @@
+.fondo {
+    -fx-background-color: #1e6b3a;
+    -fx-background-image: url("fondo.png");
+    -fx-background-size: cover;
+    -fx-background-position: center center;
+    -fx-background-repeat: no-repeat;
+}
+
+.boton-menu {
+    -fx-font-size: 16px;
+    -fx-font-family: "Arial Black", sans-serif;
+    -fx-font-weight: bold;
+    -fx-min-width: 160px;
+    -fx-min-height: 42px;
+
+    -fx-background-color: rgba(12, 35, 64, 0.85);
+    -fx-text-fill: #ffe066;
+
+    -fx-border-color: #f5b000;
+    -fx-border-width: 2px;
+    -fx-border-radius: 12px;
+    -fx-background-radius: 14px;
+
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.6), 8, 0, 0, 4);
+}
+
+.boton-menu:hover {
+    -fx-background-color: #f5b000;
+    -fx-text-fill: #0c2340;
+}
