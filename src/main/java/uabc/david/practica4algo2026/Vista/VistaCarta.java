@@ -1,5 +1,6 @@
 package uabc.david.practica4algo2026.Vista;
 
+import javafx.scene.layout.Region;
 import uabc.david.practica4algo2026.Modelo.CartaInglesa;
 import uabc.david.practica4algo2026.Modelo.Palo;
 
@@ -87,6 +88,52 @@ public class VistaCarta {
         vista.setFitHeight(altoCarta);
         vista.setSmooth(true);
         nodo = vista;
+        nodo.getStyleClass().add("carta");
         return nodo;
+    }
+
+    /**
+     * Crea una región vacía con una clase de estilos.css.
+     */
+    private Region crearRegion(String estiloCss, double x, double y,
+                               double ancho, double alto) {
+        Region region = new Region();
+        region.getStyleClass().add(estiloCss);
+        region.setLayoutX(x);
+        region.setLayoutY(y);
+        region.setMinSize(ancho, alto);
+        region.setPrefSize(ancho, alto);
+        region.setMaxSize(ancho, alto);
+        region.setMouseTransparent(true);
+        return region;
+    }
+
+    /**
+     * Dibuja un contorno blanco para cualquier zona sin cartas.
+     */
+    public Region crearContornoVacio() {
+        return crearRegion("vacio", 0, 0, anchoCarta, altoCarta);
+    }
+
+    /**
+     * Usada para oscurecer ligeramente la carta que está a una altura 'y'.
+     */
+    public Region crearCapaOscura(double y) {
+        return crearRegion("capa-oscura", 0, y, anchoCarta, altoCarta);
+    }
+
+    /**
+     * Usada para crear un contorno alrededor de la carta.
+     */
+    public Region crearContorno(double y, double alto, String estiloCss) {
+        return crearRegion(estiloCss, -2, y - 2, anchoCarta + 4, alto + 4);
+    }
+
+    public double getAnchoCarta() {
+        return anchoCarta;
+    }
+
+    public double getAltoCarta() {
+        return altoCarta;
     }
 }
