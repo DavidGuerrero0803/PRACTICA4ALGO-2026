@@ -40,7 +40,7 @@ public class VistaCascada {
         nodo.setPickOnBounds(true);
 
         nodo.setOnMouseClicked(e -> {
-
+            gui.manejarClic(zona, 0);
         });
     }
 
@@ -69,7 +69,8 @@ public class VistaCascada {
             Node carta = cartas.crearCarta(cascada.getCarta(posicion));
             carta.setLayoutY(y);
             carta.setOnMouseClicked(e -> {
-
+                gui.manejarClic(zona, profundidad);
+                e.consume();
             });
             nodo.getChildren().add(carta);
 

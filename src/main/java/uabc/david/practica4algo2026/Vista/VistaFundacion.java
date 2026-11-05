@@ -27,7 +27,7 @@ public class VistaFundacion {
         nodo.setMaxSize(cartas.getAnchoCarta(), cartas.getAltoCarta());
         nodo.setPickOnBounds(true);
         nodo.setOnMouseClicked(e -> {
-
+            gui.manejarClic(zona, 1);
         });
     }
 

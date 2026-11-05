@@ -45,15 +45,16 @@ public class EightOffGUI extends Application {
         mensaje = new Label();
         mensaje.setWrapText(true);
         mensaje.setMaxWidth(160);
+        mensaje.getStyleClass().add("mensaje");
 
         botonNuevo.setOnAction(e -> {
-
+            nuevoJuego();
         });
         botonDeshacer.setOnAction(e -> {
-
+            deshacer();
         });
         botonPista.setOnAction(e -> {
-
+            pedirPista();
         });
 
         VBox panelDerecho = new VBox(10, botonNuevo, botonDeshacer,
@@ -151,5 +152,48 @@ public class EightOffGUI extends Application {
                 mensaje.setText("No hay más movimientos posibles. Presiona Nuevo juego para intentarlo otra vez.");
             }
         }
+    }
+
+    /**
+     * Realiza la acción de deshacer el movimiento realizado.
+     */
+    private void deshacer() {
+        if (controlador.deshacerMovimiento()) {
+            limpiarSeleccion();
+            limpiarPista();
+            actualizarVista();
+        }
+    }
+
+    /**
+     * Pide una pista al controlador y la muestra.
+     * La pista a una celda libre es el último recurso del controlador (no hay ningún otro
+     * movimiento útil), así que en ese caso no se señala ninguna carta ni celda,
+     * así que solo se sugiere el movimiento con un mensaje.
+     */
+    private void pedirPista() {
+        limpiarSeleccion();
+        Movimiento sugerido = controlador.darPista();
+        if (sugerido == null) {
+            pista = null;
+            mensaje.setText("");
+        } else if (sugerido.getDestino().esCelda()) {
+            pista = null;
+            mensaje.setText("Intenta mover una carta hacia una celda vacía");
+        } else {
+            pista = sugerido;
+            mensaje.setText("Pista: de " + sugerido.getOrigen() + " a " + sugerido.getDestino());
+        }
+        actualizarVista();
+    }
+
+    /**
+     * Inicia un nuevo juego desde 0.
+     */
+    private void nuevoJuego() {
+        controlador.iniciarJuego();
+        limpiarSeleccion();
+        limpiarPista();
+        actualizarVista();
     }
 }
